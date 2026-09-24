@@ -1,0 +1,14 @@
+{
+  "name": "jevclean",
+  "version": "0.1.0",
+  "private": true,
+  "description": "Jev-powered Codex conversation organizer",
+  "license": "MIT",
+  "scripts": {
+    "test:ui": "node context_panel/test_ui.mjs",
+    "test:renderer": "node --test context_panel/test_renderer.mjs"
+  },
+  "devDependencies": {
+    "playwright": "1.62.1"
+  }
+}

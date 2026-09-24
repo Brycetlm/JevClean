@@ -1,0 +1,16 @@
+.env
+.env.*
+__pycache__/
+results.json
+credentials.json
+.credentials-*
+dist/
+node_modules/
+.DS_Store
+*.log
+*.sqlite*
+*.jsonl
+runtime.json
+bridge-runtime.json
+service.log
+cdp-profile/
