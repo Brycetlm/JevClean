@@ -4,6 +4,14 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
+## Demo video
+
+A 43-second walkthrough of classification, prompt settings and themes (Chinese UI). Cropped to the JevClean panel; the recording illustrates the workflow, not classification quality or completion guarantees.
+
+https://github.com/user-attachments/assets/a46f07dc-a5b3-4513-a9d5-907f9d8e8295
+
+## Screenshots
+
 ![JevClean English interface](docs/screenshots/overview-en.jpg)
 
 *Actual JevClean UI with synthetic demo conversations and illustrative classifications. Screenshots are not model quality or performance benchmarks.*
@@ -76,7 +84,7 @@ If the sidebar cannot attach, use `--browser`. A debug endpoint exposes control 
 | User-message classification | On | Turning it off protects user messages. |
 | Manual review | Off | Two classes by default; uncertainty/failure keeps content. On adds Review. |
 | Context window | 3 segments | Previous + target + next. Odd numbers 1–21; skipped neighbors are excluded without extending the window. |
-| Omit probability threshold | 0.90 | Lower-confidence omissions are kept, or sent to Review when enabled. |
+| Omit probability threshold | 0.90 | Range 0.5–1 (50%–100%); invalid values show an error inside Settings. Lower-confidence omissions are kept, or sent to Review when enabled. |
 | Segments per request | 5 | Range 1–8. Overlapping context windows share text. |
 | Concurrent requests | 2 | Range 1–4. |
 | Include tool output | Off | Opt in explicitly; can increase usage. |
