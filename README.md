@@ -4,11 +4,21 @@
 
 **English** · [简体中文](README.zh-CN.md)
 
-## Demo video
+## Demo videos
 
-A 43-second walkthrough of classification, prompt settings and themes (Chinese UI). Cropped to the JevClean panel; the recording illustrates the workflow, not classification quality or completion guarantees.
+### Full view — JevClean inside Codex
+
+The complete 43-second recording, including the surrounding Codex interface. Compressed for web playback, with the original 2400 × 1784 frame and full duration preserved; no cropping or cuts.
+
+https://github.com/user-attachments/assets/fc0422c9-03f9-4f1e-a088-485ff774982d
+
+### Product close-up — cropped version
+
+The same walkthrough focused on the JevClean panel: classification, prompt settings and themes (Chinese UI).
 
 https://github.com/user-attachments/assets/a46f07dc-a5b3-4513-a9d5-907f9d8e8295
+
+These recordings illustrate the workflow, not classification quality or completion guarantees.
 
 ## Screenshots
 
