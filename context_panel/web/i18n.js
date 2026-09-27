@@ -1,4 +1,6 @@
 const MESSAGES={
+"范围 0.5–1（50%–100%），低于门槛的省略判断不会自动省略。":"Range: 0.5–1 (50%–100%). Omit decisions below this threshold are not automatically omitted.",
+"保存失败：":"Could not save: ",
 "正则跳过规则":"Regex skip rules",
 "每行一条 Python 正则，忽略大小写，任意命中即跳过整条消息。显式默认：key、apikey（包含匹配，如 keyboard 也会命中）。留空关闭。命中消息直接保留，不参与判断，也不作为相邻上下文发送；原有敏感信息脱敏仍生效。":"One Python regex per line, case-insensitive. Any match skips the entire message. Visible defaults: key and apikey (substring matching also matches keyboard). Leave empty to disable. Matching messages are kept and excluded from classification and neighboring context. Existing sensitive-data redaction still applies.",
 "命中正则跳过规则，直接保留且不发送给 Jev":"Matched a regex skip rule; kept locally and not sent to Jev",
