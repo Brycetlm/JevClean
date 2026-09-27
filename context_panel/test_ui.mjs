@@ -59,6 +59,9 @@ try{
  assert.equal(await page.locator('#key-notice').isVisible(),true);
  assert.deepEqual(await englishSystemLeaks(),[]);
  assert.equal(modelCalls,0);
+ await page.fill('#key-input','short');await page.click('#key-save');
+ assert.match(await page.locator('#key-notice').textContent(),/16.*4096/);
+ assert.equal(keyWrites,0);
  keyFailure=true;
  await page.fill('#key-input','fixture-ui-private-key-12345');await page.click('#key-save');
  await page.waitForFunction(()=>!savingKey);
@@ -79,6 +82,12 @@ try{
  await page.click('#language-toggle');await page.waitForFunction(()=>uiLanguage==='en'&&!savingAppearance);
  let before=await page.evaluate(()=>({id:preview.id,settings:JSON.stringify(settings)}));
  await page.click('#settings-open');assert.deepEqual(await englishSystemLeaks(),[]);
+ for(const value of ['0.49','1.01','']){
+  await page.locator('input[name=drop_threshold]').fill(value);await page.click('#settings-save');
+  assert.equal(await page.locator('#settings').evaluate(el=>el.open),true);
+  assert.match(await page.locator('#settings-notice').textContent(),/between 0.5 and 1/);
+ }
+ await page.locator('input[name=drop_threshold]').fill('0.5');
  assert.equal(await page.locator('input[name=context_window_size]').inputValue(),'3');
  assert.equal(await page.locator('textarea[name=skip_patterns]').inputValue(),'key\napikey');
  await page.locator('textarea[name=skip_patterns]').fill('token\nsecret');
@@ -139,5 +148,21 @@ try{
  await page.setViewportSize({width:380,height:800});assert.equal(await page.evaluate(()=>document.documentElement.scrollWidth>innerWidth),false);
  await page.click('#appearance-open');assert.deepEqual(await englishSystemLeaks(),[]);
  if(process.env.JEV_QA_OUTPUT){await page.click('[data-theme-choice=fresh]');await page.waitForFunction(()=>!savingAppearance);await page.setViewportSize({width:540,height:820});await page.evaluate(()=>document.querySelector('#toast').classList.remove('show'));await page.screenshot({path:process.env.JEV_QA_OUTPUT});}
+ // Exercise real browser sandbox restrictions, not just the standalone page.
+ const sidebar=await browser.newPage();
+ try{
+  let html=await fs.readFile(path.join(root,'web/index.html'),'utf8');
+  html=html.replace('<link rel="stylesheet" href="/style.css">','<style>'+await fs.readFile(path.join(root,'web/style.css'),'utf8')+'</style>');
+  const bridge='<script>window.jevBridge=async(path,body)=>({status:200,text:JSON.stringify(path==="/api/settings"?'+JSON.stringify(config)+':path==="/api/appearance"?{theme:"fresh",language:"en"}:path==="/api/status"?{key_configured:false}:path==="/api/credentials"?{key_configured:true}:[])});</script>';
+  for(const file of ['i18n','flow','app'])html=html.replace('<script src="/'+file+'.js"></script>',(file==='app'?bridge:'')+'<script>'+await fs.readFile(path.join(root,'web',file+'.js'),'utf8')+'</script>');
+  const sandbox=(await fs.readFile(path.join(root,'cdp.mjs'),'utf8')).match(/setAttribute\('sandbox','([^']+)'\)/)[1];
+  await sidebar.setContent('<iframe sandbox="'+sandbox+'" style="width:700px;height:900px" srcdoc="'+html.replaceAll('&','&amp;').replaceAll('"','&quot;')+'"></iframe>');
+  const frame=sidebar.frameLocator('iframe');
+  await frame.locator('#key-open').click();await frame.locator('#key-input').fill('synthetic-sidebar-fixture');
+  await frame.locator('#key-save').click();await frame.locator('#key-dialog').waitFor({state:'hidden'});
+  assert.match(await frame.locator('#connection').textContent(),/configured/i);
+  await frame.locator('#key-open').click();await frame.locator('#key-input').fill('synthetic-sidebar-fixture');
+  await frame.locator('#key-input').press('Enter');await frame.locator('#key-dialog').waitFor({state:'hidden'});
+ }finally{await sidebar.close();}
  assert.equal(modelCalls,0);assert.deepEqual(errors,[]);console.log('PASS: zh/en, persistence, prompt isolation, live/retry/failure/apply states, narrow layout; zero model calls.');
 }finally{await browser.close()}
